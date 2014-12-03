@@ -112,19 +112,11 @@ class HtmlWidgetReferenceProcessor implements WidgetReferenceProcessor
 
     protected function replaceWidgetReference(HtmlWidgetReference $widgetReference, $widgetHtml)
     {
-        $fragment = $this->context->createDocumentFragment();
+        $domFragment = $this->html5->loadHTMLFragment($widgetHtml);
 
-        try
-        {
-            $fragment->appendXML($widgetHtml);
-        }
-        catch (ErrorException $exception)
-        {
-            $errorHtml = $this->getErrorHtml($exception->getMessage());
-            $fragment->appendXML($errorHtml);
-        }
+        $imported = $this->context->importNode($domFragment, true);
 
-        $widgetReference->getNode()->parentNode->replaceChild($fragment, $widgetReference->getNode());
+        $widgetReference->getNode()->parentNode->replaceChild($imported, $widgetReference->getNode());
     }
 
 
