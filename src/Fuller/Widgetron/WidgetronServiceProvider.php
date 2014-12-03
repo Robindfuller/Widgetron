@@ -24,10 +24,12 @@ class WidgetronServiceProvider extends ServiceProvider {
 
             $this->app->bind('widgetron.html', function ($app) {
 
-                $config = $app['config']->get('widgetron::available');
+                $available = $app['config']->get('widgetron::available');
+                $default = $app['config']->get('widgetron::default');
 
                 $widgetron = new HtmlWidgetReferenceProcessor();
-                $widgetron->registerWidget($config);
+                $widgetron->registerWidget($available);
+                $widgetron->setDefaultWidget($default);
 
                 return $widgetron;
             });

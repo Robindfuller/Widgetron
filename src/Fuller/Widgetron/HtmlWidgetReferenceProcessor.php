@@ -21,6 +21,9 @@ class HtmlWidgetReferenceProcessor implements WidgetReferenceProcessor
     protected $widgetsAvailable;
 
 
+    protected $defaultWidgetName;
+
+
     protected $html5;
 
 
@@ -29,6 +32,8 @@ class HtmlWidgetReferenceProcessor implements WidgetReferenceProcessor
         $this->html5 = new HTML5();
 
         $this->widgetsAvailable = [];
+
+        $this->defaultWidgetName = null;
     }
 
     /**
@@ -49,6 +54,12 @@ class HtmlWidgetReferenceProcessor implements WidgetReferenceProcessor
         }
 
         $this->widgetsAvailable[$name] = $className;
+    }
+
+
+    public function setDefaultWidget($name)
+    {
+        $this->defaultWidgetName = $name;
     }
 
 
@@ -82,10 +93,15 @@ class HtmlWidgetReferenceProcessor implements WidgetReferenceProcessor
     }
 
 
-    protected function getWidgetClassFromName($widgetName)
+    protected function getWidgetClassFromName($widgetName, $default = null)
     {
         if(!array_key_exists($widgetName, $this->widgetsAvailable))
         {
+            if(!is_null($default))
+            {
+                return $this->getWidgetClassFromName($default);
+            }
+
             return null;
         }
 
@@ -97,7 +113,7 @@ class HtmlWidgetReferenceProcessor implements WidgetReferenceProcessor
     {
         $widgetName = $widgetReference->getWidgetName();
 
-        $widgetClassName = $this->getWidgetClassFromName($widgetName);
+        $widgetClassName = $this->getWidgetClassFromName($widgetName, $this->defaultWidgetName);
 
         if(is_null($widgetClassName)) return $this->getErrorHtml('Widget ' . $widgetName . ' does not have a registered class.');
 
@@ -105,7 +121,8 @@ class HtmlWidgetReferenceProcessor implements WidgetReferenceProcessor
 
         return $r->newInstance(
             $widgetReference->getWidgetConfig(),
-            $widgetReference->getWidgetContent()
+            $widgetReference->getWidgetContent(),
+            $widgetReference->getWidgetName()
         )->render();
     }
 

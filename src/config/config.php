@@ -4,7 +4,9 @@ return [
 
     'available' => [
 
-    ]
+    ],
+
+    'default' => null
 
 ];
 
