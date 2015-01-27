@@ -42,7 +42,14 @@ class HtmlWidgetReference {
         {
             $key = preg_replace('/data-widget(\-?)/', '', $attrName);
 
-            if($key) $config[$key] = $attrNode->nodeValue;
+            $value = $attrNode->nodeValue;
+
+            if(preg_match('/^\[(.+)\]$/i', $value, $matches))
+            {
+                $value = explode('\',\'', trim($matches[1], '\''));
+            }
+
+            if($key) $config[$key] = $value;
         }
 
         return $config;
