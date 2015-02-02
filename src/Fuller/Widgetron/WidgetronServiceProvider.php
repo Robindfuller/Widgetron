@@ -19,7 +19,7 @@ class WidgetronServiceProvider extends ServiceProvider {
     public function register()
     {
 
-        $configFile = __DIR__ . '../../config/widgetron.php';
+        $configFile = __DIR__ . '/../../config/config.php';
 
         $this->mergeConfigFrom($configFile, 'widgetron');
 
