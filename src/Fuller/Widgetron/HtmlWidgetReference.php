@@ -42,6 +42,10 @@ class HtmlWidgetReference {
         {
             $key = preg_replace('/data-widget(\-?)/', '', $attrName);
 
+            $key = preg_replace_callback('/\-([a-z])/', function($matches){
+                return strtoupper($matches[1]);
+            }, $key);
+
             $value = $attrNode->nodeValue;
 
             if(preg_match('/^\[(.+)\]$/i', $value, $matches))

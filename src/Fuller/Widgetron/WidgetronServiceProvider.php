@@ -18,7 +18,15 @@ class WidgetronServiceProvider extends ServiceProvider {
 	 */
     public function register()
     {
-        $this->package('fuller/widgetron');
+
+        $configFile = __DIR__ . '/../config/widgetron.php';
+
+        $this->mergeConfigFrom($configFile, 'widgetron');
+
+        $this->publishes([
+            $configFile => config_path('widgetron.php')
+        ]);
+
 
         $this->app->booted(function () {
 
